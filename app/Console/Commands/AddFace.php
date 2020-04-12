@@ -6,21 +6,21 @@ use Illuminate\Console\Command;
 use App\Consts\FaceApi;
 use Log;
 
-class createPerson extends Command
+class AddFace extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'createPerson';
+    protected $signature = 'addFace';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'PersonGroup Person - Create with faceAPI';
+    protected $description = 'PersonGroup Person - Add Face with faceAPI';
 
     /**
      * Create a new command instance.
@@ -39,42 +39,45 @@ class createPerson extends Command
      */
     public function handle()
     {
-      Log::info('createPersonを実行');
+      Log::info('addFaceを実行します。');
 
       $faceApi = new FaceApi;
       $personInfo = $faceApi->getUnregisteredPersonInfo();
-      $UnregisteredPersonInfo = $personInfo['unregist_name_persons'];
+      $UnregisteredPersonInfo = $personInfo['unregist_image_persons'];
       if (empty($UnregisteredPersonInfo)) {
         Log::info('UnregisteredPersonInfoが存在しません。処理を終了します。');
         dd('UnregisteredPersonInfoが存在しません。処理を終了します。');
         exit;
       }
-      foreach ($UnregisteredPersonInfo as $person) {
 
-        $request = new \HTTP_Request2(FaceApi::ENDPOINT . 'face/v1.0/persongroups/' . FaceApi::PERSON_GROUP_ID . '/persons');
+      foreach ($UnregisteredPersonInfo as $person) {
+        $request = new \HTTP_Request2(FaceApi::ENDPOINT . 'face/v1.0/persongroups/' . FaceApi::PERSON_GROUP_ID . '/persons/' . $person['person_id'] . '/persistedFaces');
         $url = $request->getUrl();
-        
+
         $headers = array(
             // Request headers
             'Content-Type' => 'application/json',
             'Ocp-Apim-Subscription-Key' => FaceApi::KEY,
         );
-        
+
         $request->setHeader($headers);
-        
+
         $parameters = array(
             // Request parameters
+            // 'userData' => '{string}',
+            // 'targetFace' => '{string}',
+            // 'detectionModel' => 'detection_01',
         );
-        
+
         $url->setQueryVariables($parameters);
-        
+
         $request->setMethod(\HTTP_Request2::METHOD_POST);
 
-        $body = json_encode(array('name' => $person['name']));
-        
+        $body = json_encode(array('url' => $person['image']));
+
         // Request body
         $request->setBody($body);
-        
+
         try
         {
             $response = $request->send();

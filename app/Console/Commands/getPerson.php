@@ -41,16 +41,15 @@ class getPerson extends Command
     {
       Log::info('getPersonを実行');
 
-      $personInfo = FaceApi::getPersonInfo();
-      $RegisteredPersonInfo = $personInfo['registered_person_info'];
-      if (empty($RegisteredPersonInfo)) {
-        Log::info('RegisteredPersonInfoが存在しません。処理を終了します。');
-        dd('RegisteredPersonInfoが存在しません。処理を終了します。');
+      $personList = FaceApi::getPersonList();
+      if (empty($personList)) {
+        Log::info('personListが存在しません。処理を終了します。');
+        dd('personListが存在しません。処理を終了します。');
         exit;
       }
-      foreach ($RegisteredPersonInfo as $person) {
+      foreach ($personList as $person) {
 
-        $request = new \HTTP_Request2(FaceApi::ENDPOINT . 'face/v1.0/persongroups/' . FaceApi::PERSON_GROUP_ID . '/persons/' . $person['person_id']);
+        $request = new \HTTP_Request2(FaceApi::ENDPOINT . 'face/v1.0/persongroups/' . FaceApi::PERSON_GROUP_ID . '/persons/' . $person['personId']);
         $url = $request->getUrl();
 
         $headers = array(
