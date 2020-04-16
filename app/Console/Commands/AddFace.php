@@ -44,6 +44,7 @@ class AddFace extends Command
       $faceApi = new FaceApi;
       $personInfo = $faceApi->getUnregisteredPersonInfo();
       $UnregisteredPersonInfo = $personInfo['unregist_image_persons'];
+      // dd($UnregisteredPersonInfo);
       if (empty($UnregisteredPersonInfo)) {
         Log::info('UnregisteredPersonInfoが存在しません。処理を終了します。');
         dd('UnregisteredPersonInfoが存在しません。処理を終了します。');

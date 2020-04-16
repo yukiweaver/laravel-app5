@@ -70,12 +70,12 @@ class FaceApi
     ],
     [
       'name'        => '鈴村あいり',
-      'image'       => 'https://i.pinimg.com/originals/c6/93/f9/c693f9e1eb6d7216ea9154d3223fa2de.jpg',
+      'image'       => 'https://d2dcan0armyq93.cloudfront.net/photo/odai/600/e8712c287840680b9452ad4a7427af2c_600.jpg',
       'person_id'   => '28ce2c91-0ae9-4db2-aafa-afe49d943820',
     ],
     [
       'name'        => '桃乃木かな',
-      'image'       => 'https://upload.wikimedia.org/wikipedia/commons/a/a0/171209_%E6%A1%83%E4%B9%83%E6%9C%A8%E3%81%8B%E3%81%AA%28%EB%AA%A8%EB%AA%A8%EB%85%B8%EA%B8%B0_%EC%B9%B4%EB%82%98%29_2017_FAN_MEETING_in_SEOUL_%28First_Kiss%292%E9%83%A8_%E5%86%99%E7%9C%9F_%E2%99%A1%E6%A1%83%E4%B9%83%E6%9C%A8%E3%81%8B%E3%81%AA%E2%99%A1_%282%29.jpg',
+      'image'       => 'https://hominis.media/2018/12/images/mikami%26momonogi0003.jpg',
       'person_id'   => '3431fb31-dac4-44ab-bdb1-d4df8ab2a4dd',
     ],
     [
@@ -105,7 +105,7 @@ class FaceApi
     ],
     [
       'name'        => '吉沢明歩',
-      'image'       => 'https://www.jvcmusic.co.jp/img/jackets/VE3WA-17352.jpg',
+      'image'       => 'https://radio-chronicle.com/podcast/22/wp-content/uploads/powerpress/22_yoshizawa.jpg',
       'person_id'   => 'c253819d-88c2-4523-b407-06f4620617a8',
     ],
     [
@@ -115,7 +115,7 @@ class FaceApi
     ],
     [
       'name'        => 'あやみ旬果',
-      'image'       => 'https://blog-imgs-107.fc2.com/2/c/h/2chxvideos/20190101023931521.jpg',
+      'image'       => 'https://data.smart-flash.jp/wp-content/uploads/2019/01/24154952/ayami_1.jpg',
       'person_id'   => '7fbe5f6d-0cdc-45ed-a9e7-2e8a683d791b',
     ],
     [
@@ -135,7 +135,7 @@ class FaceApi
     ],
     [
       'name'        => '風間ゆみ',
-      'image'       => 'https://art25.photozou.jp/pub/275/1835275/photo/209631310_624.jpg',
+      'image'       => 'https://i.pinimg.com/originals/00/88/ad/0088ad3702cb414446ef33031abd0749.jpg',
       'person_id'   => '99f20496-387d-4435-879e-4f342efa3bdf',
     ],
     [
@@ -226,12 +226,12 @@ class FaceApi
     [
       'name'        => '大槻ひびき',
       'image'       => 'https://i.pinimg.com/originals/64/78/10/647810ec3bc72eaa3f52903ab974799a.jpg',
-      'person_id'   => '',
+      'person_id'   => 'e5362d2a-d4fa-45a6-92a9-dbba33505ddc',
     ],
     [
       'name'        => '園田みおん',
       'image'       => 'https://img.sirabee.com/wp/wp-content/uploads/2017/03/sirabee20170301sonodamion5-600x400.jpg',
-      'person_id'   => '',
+      'person_id'   => '46eacd92-4285-4088-b304-ad80cc181499',
     ],
   ];
 
@@ -245,8 +245,10 @@ class FaceApi
       foreach ($allPerson as $k => $val) {
         if (empty($val['persistedFaceIds'])) {
           $UnregistImagePersons[$k]['name'] = $val['name'];
-          $UnregistImagePersons[$k]['image'] = '';
           $UnregistImagePersons[$k]['person_id'] = $val['personId'];
+          if ($value['name'] == $val['name']) {
+            $UnregistImagePersons[$k]['image'] = $value['image'];
+          }
         }
         if ($value['name'] == $val['name']) {
           $count ++;
