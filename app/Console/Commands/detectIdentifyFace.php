@@ -66,6 +66,7 @@ class detectIdentifyFace extends Command
 
       $request->setMethod(\HTTP_Request2::METHOD_POST);
 
+      // urlは例で適当な画像
       $body = json_encode(array('url' => 'https://img.fril.jp/img/129852238/m/367937635.jpg'));
 
       // Request body
