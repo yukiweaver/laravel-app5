@@ -11,6 +11,30 @@ class User extends Authenticatable
     use Notifiable;
 
     /**
+     * ユーザが所有するlikeを取得
+     */
+    public function likes()
+    {
+      return $this->hasMany('App\Like');
+    }
+
+    /**
+     * ユーザが所有するpostを取得
+     */
+    public function posts()
+    {
+      return $this->hasMany('App\Post');
+    }
+
+    /**
+     * ユーザが所有するreplyを取得
+     */
+    public function replies()
+    {
+      return $this->hasMany('App\Reply');
+    }
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
