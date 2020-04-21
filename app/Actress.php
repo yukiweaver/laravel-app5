@@ -42,4 +42,13 @@ class Actress extends Model
     'prefectures',
     'image_url',
   ];
+
+  /**
+   * 女優名で前方一致検索
+   */
+  public function searchByName($name)
+  {
+    $actresses = $this->where('name', 'LIKE', "$name%")->get();
+    return $actresses;
+  }
 }

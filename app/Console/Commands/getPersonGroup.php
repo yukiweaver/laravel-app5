@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Consts\FaceApi;
+use App\Consts\FaceConst;
 use Log;
 
 class getPersonGroup extends Command
@@ -41,12 +41,12 @@ class getPersonGroup extends Command
     {
       Log::info('getPersonGroupを実行');
 
-      $request = new \HTTP_Request2(FaceApi::ENDPOINT . 'face/v1.0/persongroups/' . FaceApi::PERSON_GROUP_ID);
+      $request = new \HTTP_Request2(FaceConst::ENDPOINT . 'face/v1.0/persongroups/' . FaceConst::PERSON_GROUP_ID);
       $url = $request->getUrl();
 
       $headers = array(
           // Request headers
-          'Ocp-Apim-Subscription-Key' => FaceApi::KEY,
+          'Ocp-Apim-Subscription-Key' => FaceConst::KEY,
       );
 
       $request->setHeader($headers);

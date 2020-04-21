@@ -226,7 +226,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'FaceApi' => App\Consts\FaceApi::class,
+        'FaceConst' => App\Consts\FaceConst::class,
+        'DmmConst' => App\Consts\DmmConst::class,
 
     ],
 

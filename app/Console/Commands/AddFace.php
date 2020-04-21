@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Consts\FaceApi;
+use App\Consts\FaceConst;
 use Log;
 
 class AddFace extends Command
@@ -41,7 +41,7 @@ class AddFace extends Command
     {
       Log::info('addFaceを実行します。');
 
-      $faceApi = new FaceApi;
+      $faceApi = new FaceConst;
       $personInfo = $faceApi->getUnregisteredPersonInfo();
       $UnregisteredPersonInfo = $personInfo['unregist_image_persons'];
       // dd($UnregisteredPersonInfo);
@@ -52,13 +52,13 @@ class AddFace extends Command
       }
 
       foreach ($UnregisteredPersonInfo as $person) {
-        $request = new \HTTP_Request2(FaceApi::ENDPOINT . 'face/v1.0/persongroups/' . FaceApi::PERSON_GROUP_ID . '/persons/' . $person['person_id'] . '/persistedFaces');
+        $request = new \HTTP_Request2(FaceConst::ENDPOINT . 'face/v1.0/persongroups/' . FaceConst::PERSON_GROUP_ID . '/persons/' . $person['person_id'] . '/persistedFaces');
         $url = $request->getUrl();
 
         $headers = array(
             // Request headers
             'Content-Type' => 'application/json',
-            'Ocp-Apim-Subscription-Key' => FaceApi::KEY,
+            'Ocp-Apim-Subscription-Key' => FaceConst::KEY,
         );
 
         $request->setHeader($headers);

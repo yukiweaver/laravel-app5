@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Consts\FaceApi;
+use App\Consts\FaceConst;
 use Log;
 
 class detectIdentifyFace extends Command
@@ -41,13 +41,13 @@ class detectIdentifyFace extends Command
     {
       Log::info('detectIdentifyFaceを実行');
 
-      $request = new \HTTP_Request2(FaceApi::ENDPOINT . 'face/v1.0/detect');
+      $request = new \HTTP_Request2(FaceConst::ENDPOINT . 'face/v1.0/detect');
       $url = $request->getUrl();
 
       $headers = array(
           // Request headers
           'Content-Type' => 'application/json',
-          'Ocp-Apim-Subscription-Key' => FaceApi::KEY,
+          'Ocp-Apim-Subscription-Key' => FaceConst::KEY,
       );
 
       $request->setHeader($headers);
@@ -87,13 +87,13 @@ class detectIdentifyFace extends Command
         $faceIds[] = $val['faceId'];
       }
 
-      $request = new \HTTP_Request2(FaceApi::ENDPOINT . 'face/v1.0/identify');
+      $request = new \HTTP_Request2(FaceConst::ENDPOINT . 'face/v1.0/identify');
       $url = $request->getUrl();
 
       $headers = array(
           // Request headers
           'Content-Type' => 'application/json',
-          'Ocp-Apim-Subscription-Key' => FaceApi::KEY,
+          'Ocp-Apim-Subscription-Key' => FaceConst::KEY,
       );
 
       $request->setHeader($headers);
@@ -108,7 +108,7 @@ class detectIdentifyFace extends Command
 
       $params = [
         'faceIds'       => $faceIds,
-        'personGroupId' => FaceApi::PERSON_GROUP_ID,
+        'personGroupId' => FaceConst::PERSON_GROUP_ID,
       ];
 
       $body = json_encode($params);

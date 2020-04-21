@@ -2,7 +2,7 @@
 
 namespace App\Consts;
 
-class FaceApi
+class FaceConst
 {
   const ENDPOINT = 'https://yuki.cognitiveservices.azure.com/';
   const KEY = '1d4d601d6fae4d18953517dff692454e';
