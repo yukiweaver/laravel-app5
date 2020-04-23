@@ -49,7 +49,7 @@ class FaceConst
       'person_id'   => 'e6a9df47-0d05-4ded-9b6a-ff28a2de26b4',
     ],
     [
-      'name'        => '高橋しょうこ',
+      'name'        => '高橋しょう子',
       'image'       => 'https://i.pinimg.com/originals/04/16/36/041636f9c9a5d28306b83763e870817f.jpg',
       'person_id'   => '946916d1-89ef-4c70-a4cf-37a5d18dfee3',
     ],

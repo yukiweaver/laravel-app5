@@ -3,9 +3,15 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+use Exception;
+use Log;
 
 class Actress extends Model
 {
+  // プライマリーキーは自動連番なしに設定
+  public $incrementing = false;
+
   /**
    * 女優が所有するlikeを取得
    */
@@ -50,5 +56,26 @@ class Actress extends Model
   {
     $actresses = $this->where('name', 'LIKE', "$name%")->get();
     return $actresses;
+  }
+
+  /**
+   * 一括登録
+   * 
+   * @param array
+   * @return boolean
+   */
+  public function bulkInsert($params)
+  {
+    try {
+      $isResult = DB::table('actresses')->insert($params);
+      if (!$isResult) {
+        throw new Exception('一括登録に失敗しました。');
+      }
+      DB::commit();
+    } catch (Exception $e) {
+      DB::rollback();
+      Log::error($e->getMessage());
+      echo $e->getMessage();
+    }
   }
 }

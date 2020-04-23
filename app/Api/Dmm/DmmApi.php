@@ -1,41 +1,27 @@
 <?php
 
-namespace App\Api;
+namespace App\Api\Dmm;
 
 use App\Consts\DmmConst;
 use Log;
 
 class DmmApi
 {
+  /**
+   * @var DmmProperty
+   */
+  private $dmmProperty;
 
-  // 取得件数（最大100）
-  private $hits;
 
-  // 検索開始位置
-  private $offset;
-
-  // 女優ID
-  private $actressId;
-
-  // 検索キーワード
-  private $keyword;
-
-  // ソート順
-  private $sort;
-
-  // 頭文字（50音）
-  private $initial;
-
-  public function __construct($hits='', $offset='', $actressId='', $keyword='', $sort='', $initial='')
+  public function __construct(DmmProperty $dmmProperty)
   {
-    $this->hits       = $hits;
-    $this->offset     = $offset;
-    $this->actressId  = $actressId;
-    $this->keyword    = $keyword;
-    $this->sort       = $sort;
-    $this->initial    = $initial;
+    $this->dmmProperty = $dmmProperty;
   }
 
+  /**
+   * 女優検索API実行
+   * @return array
+   */
   public function apiActressSearch()
   {
     $request = new \HTTP_Request2(DmmConst::ENDPOINT . 'ActressSearch');
@@ -52,12 +38,12 @@ class DmmApi
         // Request parameters
         'api_id'        => DmmConst::API_ID,
         'affiliate_id'  => DmmConst::AFFILIATE_ID,
-        'keyword'       => $this->keyword,
-        'hits'          => $this->hits,
-        'offset'        => $this->offset,
-        'actress_id'    => $this->actressId,
-        'sort'          => $this->sort,
-        'initial'       => $this->initial,
+        'keyword'       => $this->dmmProperty->getKeyword(),
+        'hits'          => $this->dmmProperty->getHits(),
+        'offset'        => $this->dmmProperty->getOffset(),
+        'actress_id'    => $this->dmmProperty->getActressId(),
+        'sort'          => $this->dmmProperty->getSort(),
+        'initial'       => $this->dmmProperty->getInitial(),
         'output'        => 'json',
     );
 
@@ -76,5 +62,13 @@ class DmmApi
     {
         echo $ex;
     }
+  }
+
+  /**
+   * 商品検索API実行
+   */
+  public function apiItemSearch()
+  {
+    // 共通箇所はまとめたい
   }
 }

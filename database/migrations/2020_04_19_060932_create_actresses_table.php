@@ -24,7 +24,7 @@ class CreateActressesTable extends Migration
             $table->string('height')->nullable();
             $table->string('birthday')->nullable();
             $table->string('blood_type')->nullable();
-            $table->string('hoby')->nullable();
+            $table->string('hobby')->nullable();
             $table->string('prefectures')->nullable();
             $table->text('image_url')->nullable();
             $table->timestamps();

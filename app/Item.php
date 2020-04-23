@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model
 {
+  // プライマリーキーは自動連番なしに設定
+  public $incrementing = false;
+
+  
   /**
    * 商品に所属するactressを取得
    */
