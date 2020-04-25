@@ -12,11 +12,14 @@ class UserController extends Controller
   public function signin()
   {
     $propertyInfo = DmmConst::PROPERTY_INFO;
-    $propertyInfo['keyword'] = '成瀬';
+    $propertyInfo['keyword'] = 'あやみ旬果';
     $dmmApi = app()->makeWith('DmmApi', $propertyInfo);
     // dd($dmmApi);
-    $list = $dmmApi->apiActressSearch();
+    $list = $dmmApi->apiItemsSearch();
     dd($list);
+    // foreach ($list['items'] as $val) {
+    //   dd($val['sampleImageURL']);
+    // }
     return view('user.signin');
   }
 }

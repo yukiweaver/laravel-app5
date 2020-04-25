@@ -3,11 +3,15 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Item extends Model
 {
   // プライマリーキーは自動連番なしに設定
   public $incrementing = false;
+
+  // プライマリーキーの型
+  protected $keyType = 'string';
 
   
   /**
@@ -59,4 +63,25 @@ class Item extends Model
     'label_name',
     'volume',
   ];
+
+  /**
+   * 一括登録
+   * 
+   * @param array
+   * @return boolean
+   */
+  public function bulkInsert($params)
+  {
+    try {
+      $isResult = DB::table('items')->insert($params);
+      if (!$isResult) {
+        throw new Exception('一括登録に失敗しました。');
+      }
+      DB::commit();
+    } catch (Exception $e) {
+      DB::rollback();
+      Log::error($e->getMessage());
+      echo $e->getMessage();
+    }
+  }
 }

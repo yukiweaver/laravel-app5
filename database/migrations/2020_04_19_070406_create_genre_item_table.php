@@ -15,7 +15,7 @@ class CreateGenreItemTable extends Migration
     {
         Schema::create('genre_item', function (Blueprint $table) {
           $table->unsignedBigInteger('genre_id');
-          $table->unsignedBigInteger('item_id');
+          $table->string('item_id');
           $table->timestamps();
           $table->primary(['genre_id', 'item_id']);
 

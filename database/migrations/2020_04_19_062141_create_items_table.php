@@ -14,7 +14,8 @@ class CreateItemsTable extends Migration
     public function up()
     {
         Schema::create('items', function (Blueprint $table) {
-            $table->id();
+            $table->string('id');
+            $table->primary('id');
             $table->string('title');
             $table->text('item_url')->nullable();
             $table->text('affiliate_url')->nullable();

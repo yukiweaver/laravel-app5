@@ -24,15 +24,9 @@ class DmmApi
    */
   public function apiActressSearch()
   {
+    Log::info('apiActressSearch start!');
     $request = new \HTTP_Request2(DmmConst::ENDPOINT . 'ActressSearch');
     $url = $request->getUrl();
-
-    $headers = array(
-        // Request headers
-        // 'Ocp-Apim-Subscription-Key' => FaceApi::KEY,
-    );
-
-    $request->setHeader($headers);
 
     $parameters = array(
         // Request parameters
@@ -56,6 +50,21 @@ class DmmApi
         $response = $request->send();
         $actressInfo = $response->getBody();
         $actresses = json_decode($actressInfo, true);
+        // ステータスコード確認
+        if ($actresses['result']['status'] != 200) {
+          Log::error('status:' . $actresses['result']['status']);
+          Log::error('message:' . $actresses['result']['message']);
+          $errors = $actresses['result']['errors'];
+          foreach ($errors as $key => $error) {
+            Log::error($key . ':' . $error);
+          }
+          return [
+            'status'    => $actresses['result']['status'],
+            'message'   => $actresses['result']['message'],
+            'errors'    => $actresses['result']['errors'],
+          ];
+        }
+        Log::info('apiActressSearch success!');
         return $actresses['result'];
     }
     catch (HttpException $ex)
@@ -67,8 +76,58 @@ class DmmApi
   /**
    * 商品検索API実行
    */
-  public function apiItemSearch()
+  public function apiItemsSearch()
   {
-    // 共通箇所はまとめたい
+    Log::info('apiItemSearch start');
+    $request = new \HTTP_Request2(DmmConst::ENDPOINT . 'itemList');
+    $url = $request->getUrl();
+
+    $parameters = array(
+        // Request parameters
+        'api_id'        => DmmConst::API_ID,
+        'affiliate_id'  => DmmConst::AFFILIATE_ID,
+        'site'          => DmmConst::SITE,
+        'keyword'       => $this->dmmProperty->getKeyword(),
+        'hits'          => $this->dmmProperty->getHits(),
+        'offset'        => $this->dmmProperty->getOffset(),
+        'actress_id'    => $this->dmmProperty->getActressId(),
+        'sort'          => $this->dmmProperty->getSort(),
+        'floor'         => 'videoa',
+        'service'       => 'digital',
+        'initial'       => $this->dmmProperty->getInitial(),
+        'output'        => 'json',
+    );
+
+    $url->setQueryVariables($parameters);
+
+    $request->setMethod(\HTTP_Request2::METHOD_GET);
+
+    try
+    {
+        $response = $request->send();
+        $actressInfo = $response->getBody();
+        $actresses = json_decode($actressInfo, true);
+
+        // ステータスコード確認
+        if ($actresses['result']['status'] != 200) {
+          Log::error('status:' . $actresses['result']['status']);
+          Log::error('message:' . $actresses['result']['message']);
+          $errors = $actresses['result']['errors'];
+          foreach ($errors as $key => $error) {
+            Log::error($key . ':' . $error);
+          }
+          return [
+            'status'    => $actresses['result']['status'],
+            'message'   => $actresses['result']['message'],
+            'errors'    => $actresses['result']['errors'],
+          ];
+        }
+        Log::info('apiItemSearch success!');
+        return $actresses['result'];
+    }
+    catch (HttpException $ex)
+    {
+        echo $ex;
+    }
   }
 }

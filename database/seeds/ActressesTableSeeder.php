@@ -15,6 +15,7 @@ class ActressesTableSeeder extends Seeder
      */
     public function run()
     {
+      Log::info('ActressesTableSeeder start!');
       Eloquent::unguard();
       $propertyInfo = DmmConst::PROPERTY_INFO;
       $actressInfo = [];
@@ -31,6 +32,10 @@ class ActressesTableSeeder extends Seeder
         $propertyInfo['keyword'] = $val['name'];
         $dmmApi = app()->makeWith('DmmApi', $propertyInfo);
         $apiResult = $dmmApi->apiActressSearch();
+
+        if ($apiResult['status'] != 200) {
+          dd('API実行中にエラー発生。ログを確認してください。');
+        }
 
         // API実行結果が0件ならスキップ
         if ($apiResult['result_count'] == 0) {
@@ -57,5 +62,6 @@ class ActressesTableSeeder extends Seeder
         ];
       }
       $actressModel->bulkInsert($actressInfo);
+      Log::info('ActressesTableSeeder success!');
     }
 }

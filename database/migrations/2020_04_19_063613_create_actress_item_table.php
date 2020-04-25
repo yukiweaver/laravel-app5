@@ -15,7 +15,7 @@ class CreateActressItemTable extends Migration
     {
         Schema::create('actress_item', function (Blueprint $table) {
             $table->unsignedBigInteger('actress_id');
-            $table->unsignedBigInteger('item_id');
+            $table->string('item_id');
             $table->timestamps();
             $table->primary(['actress_id', 'item_id']);
 
