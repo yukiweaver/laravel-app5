@@ -4,31 +4,26 @@
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-md-8">
-      <div class="card">
-        <div class="card-header">{{ __('ログイン') }}</div>
-        <div class="card-body">
-          @if (count($errors) > 0)
-          <div class="errors">
-            <ul>
-              @foreach ($errors->all() as $error)
-                <li>{{$error}}</li>
-              @endforeach
-            </ul>
-          </div>
-          @endif
-          <form action="" method="POST">
-            @csrf
-            <div class="form-group">
-              <label for="email">E-Mail</label>
-              <input type="text" id="email" name="email" value="{{old('email')}}" class="form-control">
-            </div>
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input type="password" id="password" name="password" value="{{old('password')}}" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-primary">ログイン</button>
-          </form>
-        </div>
+      @if (count($errors) > 0)
+      <div class="errors">
+        <ul>
+          @foreach ($errors->all() as $error)
+            <li>{{$error}}</li>
+          @endforeach
+        </ul>
+      </div>
+      @endif
+      <div id="form">
+        <p class="form-title">ログイン</p>
+        <form action="{{ route('user.login') }}" method="POST">
+          @csrf
+          <p>メールアドレス</p>
+          <p class="mail"><input type="email" name="email" value="{{old('email')}}" /></p>
+          <p>パスワード</p>
+          <p class="pass"><input type="password" name="password" value="{{old('password')}}" /></p>
+          <p class="regist"><a href="#">新規登録</a></p>
+          <p class="submit"><input type="submit" value="ログイン" /></p>
+        </form>
       </div>
     </div>
   </div>

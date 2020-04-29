@@ -16,4 +16,13 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-Route::get('/', 'UserController@signin')->name('user.signin');
+Route::group(['middleware' => 'guest'], function() {
+  Route::get('/', 'UserController@signin')->name('user.signin');
+  Route::post('/user/login', 'UserController@login')->name('user.login');
+});
+
+
+Route::group(['middleware' => 'auth'], function() {
+  Route::get('/item/index', 'ItemController@index')->name('item.index');
+  Route::post('/user/logout', 'UserController@logout')->name('user.logout');
+});

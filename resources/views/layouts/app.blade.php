@@ -48,7 +48,10 @@
             <a class="dropdown-item" href="#">メニュー1</a>
             <a class="dropdown-item" href="#">メニュー2</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">その他</a>
+            <form name="logout" method="POST" action="{{ route('user.logout') }}">
+              @csrf
+              <a class="dropdown-item" href="javascript:logout.submit()">ログアウト</a>
+            </form>
           </div>
         </li>
         <li class="nav-item">
