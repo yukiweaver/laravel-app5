@@ -5,11 +5,12 @@ use App\Consts\DmmConst;
 use App\Actress;
 use App\Item;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class ItemsTableSeeder extends Seeder
 {
     /**
-     * itemsテーブルとactress_itemテーブルの登録
+     * items、actress_item、genre_itemの登録
      *
      * @return void
      */
@@ -17,19 +18,24 @@ class ItemsTableSeeder extends Seeder
     {
       Log::info('ItemsTableSeeder start!');
       Eloquent::unguard();
-      $itemModel = app()->make('App\Item');
+      // $itemModel = app()->make('App\Item');
       $propertyInfo = DmmConst::PROPERTY_INFO;
       $actressAll = Actress::all();
+      $dmmApi = app()->makeWith('DmmApi', $propertyInfo);
+
       if ($actressAll->isEmpty()) {
         Log::error('女優データが空です。');
         dd('エラー発生。ログを確認してください。');
       }
+
       foreach ($actressAll as $actress) {
         $propertyInfo['keyword'] = $actress['name'];
         $dmmApi = app()->makeWith('DmmApi', $propertyInfo);
+
+        // 商品取得API実行
         $apiResult = $dmmApi->apiItemsSearch();
 
-        if ($apiResult['status'] !== 200) {
+        if ($apiResult['status'] != 200) {
           dd('API実行中にエラー発生。ログを確認してください。');
         }
 
@@ -43,6 +49,7 @@ class ItemsTableSeeder extends Seeder
         $i = 0;
         $itemInfo = [];
         foreach ($items as $value) {
+          $itemModel = app()->make('App\Item');
           $item = Item::find($value['content_id']);
 
           // DBに登録済みならスキップ
@@ -60,7 +67,7 @@ class ItemsTableSeeder extends Seeder
             break;
           }
 
-          $itemInfo[] = [
+          $itemInfo = [
             'id'                  => $value['content_id'] ?? null,
             'title'               => $value['title'] ?? null,
             'item_url'            => $value['URL'] ?? null,
@@ -79,17 +86,31 @@ class ItemsTableSeeder extends Seeder
             'director_name'       => $value['iteminfo']['director'][0]['name'] ?? null,
             'label_name'          => $value['iteminfo']['label'][0]['name'] ?? null,
             'volume'              => $value['volume'] ?? null,
-            'created_at'          => Carbon::now(),
-            'updated_at'          => Carbon::now(),
           ];
+
+          // 商品が持つジャンルを格納
+          $genreIds = [];
+          if (isset($value['iteminfo']['genre'])) {
+            foreach ($value['iteminfo']['genre'] as $genre) {
+              $genreIds[] = $genre['id'];
+            }
+          }
 
           $i ++;
           $itemIds[] = $value['content_id'];
+
+          // 商品登録
+          DB::transaction(function() use($itemModel, $itemInfo, $genreIds) {
+            $itemModel->fill($itemInfo)->save();
+            $itemModel->genres()->detach();
+            $itemModel->genres()->attach($genreIds);
+          });
         }
         // 登録処理
-        $itemModel->bulkInsert($itemInfo);
-        $actress->items()->detach();
-        $actress->items()->attach($itemIds);
+        DB::transaction(function() use($actress, $itemIds) {
+          $actress->items()->detach();
+          $actress->items()->attach($itemIds);
+        });
       }
       Log::info('ItemsTableSeeder success!');
       // dd($itemInfo);

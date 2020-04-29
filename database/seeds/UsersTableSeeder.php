@@ -12,6 +12,8 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
+      Log::info('UsersTableSeeder start!');
+      Eloquent::unguard();
       $users = [
         [
           'name'      => 'test0001',
