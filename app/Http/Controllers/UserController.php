@@ -8,6 +8,8 @@ use App\Api\Dmm\DmmProperty;
 use App\Consts\DmmConst;
 use App\Item;
 use Auth;
+use App\Http\Requests\UserRequest;
+use Hash;
 
 class UserController extends Controller
 {
@@ -31,7 +33,7 @@ class UserController extends Controller
   /**
    * ログイン処理アクション
    */
-  public function login(Request $request)
+  public function login(UserRequest $request)
   {
     $email    = $request->input('email');
     $password = $request->input('password');
@@ -50,5 +52,38 @@ class UserController extends Controller
   {
     Auth::logout();
     return redirect()->route('user.signin');
+  }
+
+  /**
+   * ユーザ登録ページ表示アクション
+   */
+  public function create()
+  {
+    return view('user.create');
+  }
+
+  /**
+   * ユーザ登録処理アクション
+   */
+  public function store(UserRequest $request)
+  {
+    $user       = app()->make('App\User');
+    $name       = $request->input('name');
+    $email      = $request->input('email');
+    $password   = $request->input('password');
+    $params     = [
+      'name'      => $name,
+      'email'     => $email,
+      'password'  => Hash::make($password),
+    ];
+
+    if (!$user->fill($params)->save()) {
+      return redirect()->route('user.create')->with('error_message', 'ユーザ登録に失敗しました。');
+    }
+
+    if (!Auth::attempt(['email' => $email, 'password' => $password])) {
+      return redirect()->route('user.signin')->with('error_message', 'ログインに失敗しました。');
+    }
+    return redirect()->route('item.index');
   }
 }

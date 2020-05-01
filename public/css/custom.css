@@ -99,3 +99,7 @@ input[type="password"] {
 p.regist > a {
   color: #077685;
 }
+
+.errors {
+  color: red;
+}
