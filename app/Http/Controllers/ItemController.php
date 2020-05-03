@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Item;
 
 class ItemController extends Controller
 {
@@ -11,6 +12,10 @@ class ItemController extends Controller
    */
   public function index()
   {
-    return view('item.index');
+    $itemAll = Item::orderBy('id', 'desc')->take(30)->get();
+    $viewParams = [
+      'items' => $itemAll,
+    ];
+    return view('item.index', $viewParams);
   }
 }
