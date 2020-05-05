@@ -9,6 +9,7 @@ class DmmConst
   const AFFILIATE_ID = 'yukiweaver-999';
   const SITE = 'FANZA';
   const FLOOR_ID = '43';
+  const MAX = 10;
   const PROPERTY_INFO = [
     'hits'        => '100',
     'offset'      => '',

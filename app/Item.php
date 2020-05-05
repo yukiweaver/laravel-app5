@@ -67,6 +67,19 @@ class Item extends Model
   ];
 
   /**
+   * アクセサ：title表示
+   */
+  public function getTitleAttribute($title)
+  {
+    $limit = 28; // 文字上限数
+    if (mb_strlen($title) > $limit) {
+      $title = mb_substr($title, 0, $limit);
+      $title .= '...';
+    }
+    return $title;
+  }
+
+  /**
    * 一括登録
    * 
    * @param array
@@ -85,5 +98,22 @@ class Item extends Model
       Log::error($e->getMessage());
       echo $e->getMessage();
     }
+  }
+
+  /**
+   * 商品を取得
+   */
+  public function findItems($pageId, $max)
+  {
+    if (empty($pageId)) {
+      $offset = 0;
+    } else {
+      $offset = ($pageId - 1) * $max;
+    }
+    $items = $this->orderBy('id', 'desc')
+                  ->offset($offset)
+                  ->limit(10)
+                  ->get();
+    return $items;
   }
 }

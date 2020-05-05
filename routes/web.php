@@ -27,4 +27,5 @@ Route::group(['middleware' => 'guest'], function() {
 Route::group(['middleware' => 'auth'], function() {
   Route::get('/item/index', 'ItemController@index')->name('item.index');
   Route::post('/user/logout', 'UserController@logout')->name('user.logout');
+  Route::get('/item/detail', 'ItemController@detail')->name('item.detail');
 });
