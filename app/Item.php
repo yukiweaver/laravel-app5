@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Exception;
 use Log;
+use App\Actress;
 
 class Item extends Model
 {
@@ -103,7 +104,7 @@ class Item extends Model
   /**
    * 商品を取得
    */
-  public function findItems($pageId, $max)
+  public function findItems($pageId, $max, $actressName=null, $genreIds=[])
   {
     if (empty($pageId)) {
       $offset = 0;

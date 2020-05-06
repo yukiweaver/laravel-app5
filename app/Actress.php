@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Exception;
 use Log;
+use App\Utils\CommonUtil;
 
 class Actress extends Model
 {
@@ -56,6 +57,22 @@ class Actress extends Model
   {
     $actresses = $this->where('name', 'LIKE', "$name%")->get();
     return $actresses;
+  }
+
+  /**
+   * 女優名で前方一致検索後、idを一次元配列で返す
+   */
+  public function getIdsByName($name)
+  {
+    $isHiragana = CommonUtil::strCheck($name);
+    $query = $this->query();
+    if ($isHiragana) {
+      $query->where('name_kana', 'LIKE', $name . '%');
+    } else {
+      $query->where('name', 'LIKE', $name . '%');
+    }
+    $ids = collect($query->get(['id'])->toArray());
+    return $ids->flatten()->toArray();
   }
 
   /**

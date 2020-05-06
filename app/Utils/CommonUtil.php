@@ -30,4 +30,17 @@ class CommonUtil
       'next_flg' => $nextFlg,
     ];
   }
+
+  /**
+   * $strが全て平仮名ならtrue,それ以外はfalseを返す
+   * @return boolean
+   */
+  public static function strCheck($str)
+  {
+    mb_regex_encoding("UTF-8");
+    if (preg_match("/^[ぁ-ん]+$/u", $str)) {
+        return true;
+    }
+    return false;
+  }
 }

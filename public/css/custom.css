@@ -107,6 +107,7 @@ p.regist > a {
 #mainBox {
   /* width: 640px; */
   margin: 0 auto;
+  text-align: center;
 }
 #parent {
   /* width: 660px; */
@@ -206,3 +207,16 @@ p.regist > a {
 }
 /* ページネーション 終了 */
 
+.search_link_genre {
+  text-align: center;
+  margin: 50px;
+}
+
+#genres {
+  overflow: hidden;
+}
+
+.genre_name {
+  float: left;
+  margin: 10px;
+}

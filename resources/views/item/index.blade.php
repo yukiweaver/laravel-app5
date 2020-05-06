@@ -14,7 +14,24 @@
       </div>
       @endif
       <div id="mainBox">
-        <h1>商品ページ</h1>
+        <div class="search_link_genre">
+          <form>
+            <div class="form-group">
+                <label for="actress_name">女優名（ひらがな、漢字）</label><br>
+                <input type="text" name="actress_name" class="form-control" value="" id="actress_name">
+            </div>
+            <div class="form-group" id="genres">
+              <label>ジャンル</label><br>
+              @foreach ($genres as $genre)
+              <div class="genre_name">
+                <input type="checkbox" id="{{$genre['id']}}" name="genres" value="{{$genre['id']}}">
+                <label for="{{$genre['id']}}">{{$genre['name']}}</label>
+              </div>
+              @endforeach
+            </div>
+            <button type="button" class="btn btn-primary" id="search_btn">検索する</button>
+          </form>
+        </div>
         <div id="parent">
           @foreach ($items as $item)
           <div class="child">
@@ -31,14 +48,14 @@
       <ul class="pagination">
         <input type="hidden" id="page_id" value="{{$page_id}}">
         @if ($prev_flg)
-        <li class="pre"><a><span id="prev">前へ</span></a></li>
+        <li class="pre"><a><span id="prev"><<<</span></a></li>
         @else
-        <li class="pre"><a href="#"><span id="prev">前へ</span></a></li>
+        <li class="pre"><a href="#"><span id="prev"><<<</span></a></li>
         @endif
         @if ($next_flg)
-        <li class="next"><a><span id="next">次へ</span></a></li>
+        <li class="next"><a><span id="next">>>></span></a></li>
         @else
-        <li class="next"><a href="#"><span id="next">次へ</span></a></li>
+        <li class="next"><a href="#"><span id="next">>>></span></a></li>
         @endif
       </ul>
     </div>
@@ -46,6 +63,7 @@
 </div>
 <script>
   $(function() {
+    // ページネーション
     $('.pagination').click(function(event) {
       event.preventDefault();
       let currentPageId = $('#page_id').val();
@@ -81,6 +99,34 @@
       .fail((data) => {
         alert('error:ajax通信失敗');
       })
+    });
+
+    // 検索
+    $('#search_btn').click(function() {
+      let actressName = $('#actress_name').val();
+      let genreIds = $('input[name=genres]:checked').map(function() {
+        return $(this).val();
+      }).get();
+      if (!actressName && genreIds.length == 0) {
+        alert('女優名を入力またはジャンルを選択してください。');
+        return false;
+      }
+
+      $.ajax({
+        url: "{{route('item.index')}}",
+        type: "GET",
+        dataType: "json",
+        data: {
+          'actress_name': actressName,
+          'genre_ids': genreIds,
+        }
+      })
+      .done((data) => {
+        alert('success');
+      })
+      .fail((data) => {
+        alert('danger');
+      })
     })
   })
 
@@ -102,14 +148,14 @@
     let html = '';
     html += `<input type="hidden" id="page_id" value="${pageId}">`;
     if (prevFlg) {
-      html += `<li class="pre"><a><span id="prev">前へ</span></a></li>`;
+      html += `<li class="pre"><a><span id="prev"><<<</span></a></li>`;
     } else {
-      html += `<li class="pre"><a href="#"><span id="prev">前へ</span></a></li>`;
+      html += `<li class="pre"><a href="#"><span id="prev"><<<</span></a></li>`;
     }
     if (nextFlg) {
-      html += `<li class="next"><a><span id="next">次へ</span></a></li>`;
+      html += `<li class="next"><a><span id="next">>>></span></a></li>`;
     } else {
-      html += `<li class="next"><a href="#"><span id="next">次へ</span></a></li>`;
+      html += `<li class="next"><a href="#"><span id="next">>>></span></a></li>`;
     }
     return html;
   }
