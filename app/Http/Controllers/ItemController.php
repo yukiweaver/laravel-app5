@@ -16,11 +16,11 @@ class ItemController extends Controller
    */
   public function index(Request $request)
   {
-    $itemModel = app()->make('App\Item');
     $actressModel = app()->make('App\Actress');
+    $itemModel = app()->make('App\Item');
 
     // 商品全件カウント
-    $itemCnt = Item::count();
+    $itemCnt = $itemModel->countItem();
 
     if (empty($request->input('page_id'))) {
       $pageId = 1;
@@ -32,10 +32,10 @@ class ItemController extends Controller
 
     $actressName = $request->input('actress_name');
     $ids = $actressModel->getIdsByName($actressName);
-    dd($ids);
+    // dd($ids);
     $genreIds = $request->input('genre_ids');
     if (isset($actressName) || isset($genreIds)) {
-      $items = $itemModel->findItem($pageId, \DmmConst::MAX, $actressName, $genreIds);
+      $items = $itemModel->findItem($pageId, \DmmConst::MAX, $actressName, $genreIds, $actressModel);
       return response()->json(['items' => $items]);
     }
 

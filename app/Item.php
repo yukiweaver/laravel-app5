@@ -10,6 +10,7 @@ use App\Actress;
 
 class Item extends Model
 {
+
   // プライマリーキーは自動連番なしに設定
   public $incrementing = false;
 
@@ -104,7 +105,7 @@ class Item extends Model
   /**
    * 商品を取得
    */
-  public function findItems($pageId, $max, $actressName=null, $genreIds=[])
+  public function findItems($pageId, $max, $actressName=null, $genreIds=[], Actress $actress=null)
   {
     if (empty($pageId)) {
       $offset = 0;
@@ -116,5 +117,18 @@ class Item extends Model
                   ->limit(10)
                   ->get();
     return $items;
+  }
+
+  /**
+   * 全商品をカウント
+   */
+  public function countItem()
+  {
+    return $this->count();
+  }
+
+  public function getActress()
+  {
+    return $this->actress;
   }
 }

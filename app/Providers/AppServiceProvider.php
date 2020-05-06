@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Api\Dmm\DmmProperty;
 use App\Api\Dmm\DmmApi;
+use App\Actress;
+use App\Item;
 
 class AppServiceProvider extends ServiceProvider
 {
