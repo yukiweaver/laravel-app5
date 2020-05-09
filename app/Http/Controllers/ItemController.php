@@ -19,6 +19,11 @@ class ItemController extends Controller
     $actressModel = app()->make('App\Actress');
     $itemModel = app()->make('App\Item');
 
+    // $test = Item::whereHas('genres', function($query) {
+    //   $query->whereIn('id', [2001, 5001]);
+    // })->get();
+    
+
     // 商品全件カウント
     $itemCnt = $itemModel->countItem();
 
@@ -31,8 +36,6 @@ class ItemController extends Controller
     }
 
     $actressName = $request->input('actress_name');
-    $ids = $actressModel->getIdsByName($actressName);
-    // dd($ids);
     $genreIds = $request->input('genre_ids');
     if (isset($actressName) || isset($genreIds)) {
       $items = $itemModel->findItem($pageId, \DmmConst::MAX, $actressName, $genreIds, $actressModel);

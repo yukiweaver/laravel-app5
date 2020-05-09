@@ -126,9 +126,4 @@ class Item extends Model
   {
     return $this->count();
   }
-
-  public function getActress()
-  {
-    return $this->actress;
-  }
 }
