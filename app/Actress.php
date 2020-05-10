@@ -62,7 +62,7 @@ class Actress extends Model
   /**
    * 女優名で前方一致検索後、idを一次元配列で返す
    */
-  public function getIdsByName($name)
+  public function findIdsByName($name)
   {
     $isHiragana = CommonUtil::strCheck($name);
     $query = $this->query();

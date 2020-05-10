@@ -32,6 +32,19 @@ class CommonUtil
   }
 
   /**
+   * 最大ページ数を返す
+   */
+  public static function getMaxPage($itemCnt)
+  {
+    if ($itemCnt === 0) {
+      return 1;
+    } 
+    
+    $maxPage = ceil($itemCnt / \DmmConst::MAX);
+    return $maxPage;
+  }
+
+  /**
    * $strが全て平仮名ならtrue,それ以外はfalseを返す
    * @return boolean
    */

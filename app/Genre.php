@@ -16,7 +16,8 @@ class Genre extends Model
    */
   public function items()
   {
-    return $this->belongsToMany('App\Item');
+    return $this->belongsToMany('App\Item')
+                ->using('App\GenreItem');
   }
 
   /**

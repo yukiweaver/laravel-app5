@@ -31,7 +31,8 @@ class Item extends Model
    */
   public function genres()
   {
-    return $this->belongsToMany('App\Genre');
+    return $this->belongsToMany('App\Genre')
+                ->using('App\GenreItem');
   }
 
   /**
@@ -104,25 +105,75 @@ class Item extends Model
 
   /**
    * 商品を取得
+   * 
+   * @return collection
    */
-  public function findItems($pageId, $max, $actressName=null, $genreIds=[], Actress $actress=null)
+  public function findItems($pageId, $max, $genreIds=[], GenreItem $genreItem=null, $actressName=null, Actress $actress=null)
   {
     if (empty($pageId)) {
       $offset = 0;
     } else {
       $offset = ($pageId - 1) * $max;
     }
-    $items = $this->orderBy('id', 'desc')
-                  ->offset($offset)
-                  ->limit(10)
-                  ->get();
+
+    if (!empty($genreIds)) {
+      $itemIds = $genreItem->findByGenreIds($genreIds);
+      if (empty($itemIds)) {
+        return [];
+      }
+    }
+
+    if (!empty($actressName)) {
+      $actressIds = $actress->findIdsByName($actressName);
+    }
+
+    $query = $this->query();
+    if (!empty($actressIds)) {
+      $query->whereHas('actresses', function($q) use($actressIds) {
+        $q->whereIn('id', $actressIds);
+      });
+    }
+    if (!empty($itemIds)) {
+      $query->whereIn('id', $itemIds);
+    }
+    $query->orderBy('id', 'desc')->offset($offset)->limit($max);
+    $items = $query->get();
     return $items;
+  }
+
+  /**
+   * 検索条件で商品をカウント
+   */
+  public function countItem($genreIds=[], GenreItem $genreItem=null, $actressName=null, Actress $actress=null)
+  {
+    if (!empty($genreIds)) {
+      $itemIds = $genreItem->findByGenreIds($genreIds);
+      if (empty($itemIds)) {
+        return 0;
+      }
+    }
+
+    if (!empty($actressName)) {
+      $actressIds = $actress->findIdsByName($actressName);
+    }
+
+    $query = $this->query();
+    if (!empty($actressIds)) {
+      $query->whereHas('actresses', function($q) use($actressIds) {
+        $q->whereIn('id', $actressIds);
+      });
+    }
+    if (!empty($itemIds)) {
+      $query->whereIn('id', $itemIds);
+    }
+    $cnt = $query->count();
+    return $cnt;
   }
 
   /**
    * 全商品をカウント
    */
-  public function countItem()
+  public function countAllItem()
   {
     return $this->count();
   }

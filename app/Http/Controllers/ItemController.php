@@ -7,6 +7,7 @@ use App\Item;
 use App\Genre;
 use Log;
 use App\Utils\CommonUtil;
+use App\GenreItem;
 
 class ItemController extends Controller
 {
@@ -18,14 +19,17 @@ class ItemController extends Controller
   {
     $actressModel = app()->make('App\Actress');
     $itemModel = app()->make('App\Item');
+    $genreItemModel = app()->make('App\GenreItem');
 
-    // $test = Item::whereHas('genres', function($query) {
-    //   $query->whereIn('id', [2001, 5001]);
-    // })->get();
+    $test = Item::whereHas('actresses', function($query) {
+      $query->whereIn('id', [15365, 1030262]);
+    })->whereIn('id', ['53dv01475', 'onsd00879'])->get();
+    // $test = $genreItemModel->findByGenreIds([2001, 5002, 5001]);
+    // dd($test);
     
 
     // 商品全件カウント
-    $itemCnt = $itemModel->countItem();
+    $itemCnt = $itemModel->countAllItem();
 
     if (empty($request->input('page_id'))) {
       $pageId = 1;
@@ -38,8 +42,10 @@ class ItemController extends Controller
     $actressName = $request->input('actress_name');
     $genreIds = $request->input('genre_ids');
     if (isset($actressName) || isset($genreIds)) {
-      $items = $itemModel->findItem($pageId, \DmmConst::MAX, $actressName, $genreIds, $actressModel);
-      return response()->json(['items' => $items]);
+      $items = $itemModel->findItems($pageId, \DmmConst::MAX, $genreIds, $genreItemModel, $actressName, $actressModel);
+      $itemCnt = $itemModel->countItem($genreIds, $genreItemModel, $actressName, $actressModel);
+      $maxPage = CommonUtil::getMaxPage($itemCnt);
+      return response()->json(['items' => $items, 'max_page' => $maxPage]);
     }
 
     $pagenateInfo = CommonUtil::pagenateInfo($itemCnt, $pageId);

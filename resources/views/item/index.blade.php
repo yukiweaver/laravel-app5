@@ -84,7 +84,7 @@
         }
       })
       .done((data) => {
-        if (data.length == 0) {
+        if (data.items.length == 0) {
           alert('error:商品を取得できませんでした。');
           return;
         }
@@ -122,10 +122,23 @@
         }
       })
       .done((data) => {
-        alert('success');
+        if (data.items.length == 0) {
+          alert('該当商品が存在しません。');
+          $('input[name=genres]').prop('checked', false);
+          $('#actress_name').val('');
+          return;
+        }
+        let pageId = 1;
+        let prevFlg = true;
+        let nextFlg = data.max_page <= 1 ? true : false;
+        $('.child').remove();
+        $.each(data.items, function(ids, item) {
+          $('#parent').append(createHtmlItems(item));
+        });
+        $('.pagination').html(createHtmlPagenate(pageId, prevFlg, nextFlg));
       })
       .fail((data) => {
-        alert('danger');
+        alert('error:ajax通信失敗');
       })
     })
   })
