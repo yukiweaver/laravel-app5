@@ -8,6 +8,7 @@ use App\Genre;
 use Log;
 use App\Utils\CommonUtil;
 use App\GenreItem;
+use App\Http\Requests\ItemRequest;
 
 class ItemController extends Controller
 {
@@ -15,7 +16,7 @@ class ItemController extends Controller
   /**
    * 商品表示アクション
    */
-  public function index(Request $request)
+  public function index(ItemRequest $request)
   {
     $actressModel   = app()->make('App\Actress');
     $itemModel      = app()->make('App\Item');
@@ -51,12 +52,12 @@ class ItemController extends Controller
 
     $items = $itemModel->findItems($pageId, \DmmConst::MAX);
     $viewParams = [
-      'items' => $items,
-      'prev_flg' => $pagenateInfo['prev_flg'],
-      'next_flg' => $pagenateInfo['next_flg'],
-      'page_id' => $pageId,
-      'max_page' => $pagenateInfo['max_page'],
-      'genres' => collect(\DmmConst::GENRE_LIST),
+      'items'     => $items,
+      'prev_flg'  => $pagenateInfo['prev_flg'],
+      'next_flg'  => $pagenateInfo['next_flg'],
+      'page_id'   => $pageId,
+      'max_page'  => $pagenateInfo['max_page'],
+      'genres'    => collect(\DmmConst::GENRE_LIST),
     ];
 
     $request->session()->forget('actress_name');
@@ -64,8 +65,12 @@ class ItemController extends Controller
     return view('item.index', $viewParams);
   }
 
-  public function detail(Request $request)
+  public function detail(ItemRequest $request)
   {
-    //
+    $itemModel = app()->make('App\Item');
+    $itemId = $request->input('item_id');
+
+    $viewParams = [];
+    return view('item.detail', $viewParams);
   }
 }
