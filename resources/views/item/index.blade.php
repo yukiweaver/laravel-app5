@@ -85,11 +85,11 @@
       })
       .done((data) => {
         if (data.items.length == 0) {
-          alert('error:商品を取得できませんでした。');
+          alert('商品を取得できませんでした。');
           return;
         }
         let prevFlg = (pageId <= 1 && targetId == 'prev') ? true : false;
-        let nextFlg = (pageId >= '{{$max_page}}' && targetId == 'next') ? true : false;
+        let nextFlg = (pageId >= data.max_page && targetId == 'next') ? true : false;
         $('.child').remove();
         $.each(data.items, function(ids, item) {
           $('#parent').append(createHtmlItems(item));

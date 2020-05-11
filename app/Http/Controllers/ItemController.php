@@ -17,16 +17,9 @@ class ItemController extends Controller
    */
   public function index(Request $request)
   {
-    $actressModel = app()->make('App\Actress');
-    $itemModel = app()->make('App\Item');
+    $actressModel   = app()->make('App\Actress');
+    $itemModel      = app()->make('App\Item');
     $genreItemModel = app()->make('App\GenreItem');
-
-    $test = Item::whereHas('actresses', function($query) {
-      $query->whereIn('id', [15365, 1030262]);
-    })->whereIn('id', ['53dv01475', 'onsd00879'])->get();
-    // $test = $genreItemModel->findByGenreIds([2001, 5002, 5001]);
-    // dd($test);
-    
 
     // 商品全件カウント
     $itemCnt = $itemModel->countAllItem();
@@ -35,13 +28,19 @@ class ItemController extends Controller
       $pageId = 1;
     } else {
       $pageId = $request->input('page_id');
-      $items = $itemModel->findItems($pageId, \DmmConst::MAX);
-      return response()->json(['items' => $items]);
+      $actressName = $request->session()->get('actress_name');
+      $genreIds = $request->session()->get('genre_ids');
+      $items = $itemModel->findItems($pageId, \DmmConst::MAX, $genreIds, $genreItemModel, $actressName, $actressModel);
+      $itemCnt = $itemModel->countItem($genreIds, $genreItemModel, $actressName, $actressModel);
+      $maxPage = CommonUtil::getMaxPage($itemCnt);
+      return response()->json(['items' => $items, 'max_page' => $maxPage]);
     }
 
     $actressName = $request->input('actress_name');
     $genreIds = $request->input('genre_ids');
     if (isset($actressName) || isset($genreIds)) {
+      $request->session()->put('actress_name', $actressName);
+      $request->session()->put('genre_ids', $genreIds);
       $items = $itemModel->findItems($pageId, \DmmConst::MAX, $genreIds, $genreItemModel, $actressName, $actressModel);
       $itemCnt = $itemModel->countItem($genreIds, $genreItemModel, $actressName, $actressModel);
       $maxPage = CommonUtil::getMaxPage($itemCnt);
@@ -60,6 +59,8 @@ class ItemController extends Controller
       'genres' => collect(\DmmConst::GENRE_LIST),
     ];
 
+    $request->session()->forget('actress_name');
+    $request->session()->forget('genre_ids');
     return view('item.index', $viewParams);
   }
 
