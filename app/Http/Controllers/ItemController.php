@@ -45,12 +45,14 @@ class ItemController extends Controller
       $items = $itemModel->findItems($pageId, \DmmConst::MAX, $genreIds, $genreItemModel, $actressName, $actressModel);
       $itemCnt = $itemModel->countItem($genreIds, $genreItemModel, $actressName, $actressModel);
       $maxPage = CommonUtil::getMaxPage($itemCnt);
-      return response()->json(['items' => $items, 'max_page' => $maxPage]);
+      if ($request->ajax()) {
+        return response()->json(['items' => $items, 'max_page' => $maxPage]);
+      }
     }
 
     $pagenateInfo = CommonUtil::pagenateInfo($itemCnt, $pageId);
 
-    $items = $itemModel->findItems($pageId, \DmmConst::MAX);
+    $items = $itemModel->findItems($pageId, \DmmConst::MAX, $genreIds, $genreItemModel, $actressName, $actressModel);
     $viewParams = [
       'items'     => $items,
       'prev_flg'  => $pagenateInfo['prev_flg'],
@@ -59,18 +61,25 @@ class ItemController extends Controller
       'max_page'  => $pagenateInfo['max_page'],
       'genres'    => collect(\DmmConst::GENRE_LIST),
     ];
-
-    $request->session()->forget('actress_name');
-    $request->session()->forget('genre_ids');
+    if (!CommonUtil::checkPreviousUrl()) {
+      $request->session()->forget('actress_name');
+      $request->session()->forget('genre_ids');
+    }
     return view('item.index', $viewParams);
   }
 
+  /**
+   * 商品詳細ページ表示アクション
+   */
   public function detail(ItemRequest $request)
   {
     $itemModel = app()->make('App\Item');
     $itemId = $request->input('item_id');
+    $item = Item::find($itemId);
 
-    $viewParams = [];
+    $viewParams = [
+      'item' => $item,
+    ];
     return view('item.detail', $viewParams);
   }
 }

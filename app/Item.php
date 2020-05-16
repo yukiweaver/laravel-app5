@@ -74,7 +74,7 @@ class Item extends Model
    */
   public function getTitleAttribute($title)
   {
-    $limit = 28; // 文字上限数
+    $limit = 26; // 文字上限数
     if (mb_strlen($title) > $limit) {
       $title = mb_substr($title, 0, $limit);
       $title .= '...';

@@ -56,4 +56,19 @@ class CommonUtil
     }
     return false;
   }
+
+  public static function checkPreviousUrl()
+  {
+    $urls = [
+      route('item.detail'),
+    ];
+    $successFlg = false;
+    foreach ($urls as $url) {
+      if (preg_match('{^' . $url . '}', url()->previous())) {
+        $successFlg = true;
+        break;
+      }
+    }
+    return $successFlg;
+  }
 }
