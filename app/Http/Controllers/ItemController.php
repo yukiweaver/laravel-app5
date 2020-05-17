@@ -73,7 +73,6 @@ class ItemController extends Controller
    */
   public function detail(ItemRequest $request)
   {
-    $itemModel = app()->make('App\Item');
     $itemId = $request->input('item_id');
     $item = Item::find($itemId);
 

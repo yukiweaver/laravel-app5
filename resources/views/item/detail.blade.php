@@ -77,7 +77,7 @@
                     <td align="right" valign="top" class="nw">ジャンル：</td>
                     <td>
                       @foreach ($item->genres as $genre)
-                      <a href="/digital/videoa/-/list/=/article=keyword/id=6533/">{{$genre->name}}</a>&nbsp;&nbsp;
+                      <a href="{{route('item.index', ['genre_ids' => [$genre->id]])}}">{{$genre->name}}</a>&nbsp;&nbsp;
                       @endforeach
                     </td>
                   </tr>

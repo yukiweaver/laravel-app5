@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Exception;
 use Log;
 use App\Actress;
+use Carbon\Carbon;
 
 class Item extends Model
 {
@@ -80,6 +81,26 @@ class Item extends Model
       $title .= '...';
     }
     return $title;
+  }
+
+  /**
+   * アクセサ：release_date表示
+   */
+  public function getReleaseDateAttribute(string $releaseDate)
+  {
+    $releaseDate = Carbon::parse($releaseDate);
+    return $releaseDate->format('Y/m/d');
+  }
+
+  /**
+   * アクセサ：volume表示
+   */
+  public function getVolumeAttribute($volume)
+  {
+    if (empty($volume)) {
+      return;
+    }
+    return $volume . '分';
   }
 
   /**
