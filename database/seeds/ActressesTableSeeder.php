@@ -5,6 +5,7 @@ use App\Actress;
 use App\Consts\DmmConst;
 use App\Consts\FaceConst;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class ActressesTableSeeder extends Seeder
 {
@@ -16,7 +17,7 @@ class ActressesTableSeeder extends Seeder
     public function run()
     {
       Log::info('ActressesTableSeeder start!');
-      Eloquent::unguard();
+      // Eloquent::unguard();
       $propertyInfo = DmmConst::PROPERTY_INFO;
       $actressInfo = [];
       $actressList = FaceConst::ACTRESS_LIST;

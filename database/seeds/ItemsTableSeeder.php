@@ -6,6 +6,7 @@ use App\Actress;
 use App\Item;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ItemsTableSeeder extends Seeder
 {
@@ -17,7 +18,7 @@ class ItemsTableSeeder extends Seeder
     public function run()
     {
       Log::info('ItemsTableSeeder start!');
-      Eloquent::unguard();
+      // Eloquent::unguard();
       // $itemModel = app()->make('App\Item');
       $propertyInfo = DmmConst::PROPERTY_INFO;
       $actressAll = Actress::all();

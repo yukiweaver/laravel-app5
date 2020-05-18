@@ -88,9 +88,10 @@
                   </tr>
 
                   <tr>
-                    <td align="right" valign="top" class="nw">平均評価：</td>
-                    <td><img src="https://p.dmm.co.jp/p/ms/review/4.gif" width="56" height="11" class="mg-r6 middle">
-                      <a href="#review">レビューを見る</a>
+                    <td align="right" valign="top" class="nw">購入：</td>
+                    <td>
+                      {{-- <img src="https://p.dmm.co.jp/p/ms/review/4.gif" width="56" height="11" class="mg-r6 middle"> --}}
+                      <a href="{{$item->item_url}}" target="_blank">DMMで購入する</a>
                     </td>
                   </tr>
 

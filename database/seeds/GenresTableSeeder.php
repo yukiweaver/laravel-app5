@@ -3,6 +3,8 @@
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use App\Consts\DmmConst;
 
 class GenresTableSeeder extends Seeder
 {
@@ -14,7 +16,7 @@ class GenresTableSeeder extends Seeder
     public function run()
     {
       Log::info('GenresTableSeeder start!');
-      Eloquent::unguard();
+      // Eloquent::unguard();
       $genreModel = app()->make('App\Genre');
       $propertyInfo = DmmConst::PROPERTY_INFO;
       $dmmApi = app()->makeWith('DmmApi', $propertyInfo);
