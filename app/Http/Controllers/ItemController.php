@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Item;
 use App\Genre;
-use Log;
+use Illuminate\Support\Facades\Log;
 use App\Utils\CommonUtil;
 use App\GenreItem;
 use App\Http\Requests\ItemRequest;

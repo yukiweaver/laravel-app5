@@ -3,7 +3,7 @@
 namespace App\Api\Dmm;
 
 use App\Consts\DmmConst;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 class DmmApi
 {
@@ -67,7 +67,7 @@ class DmmApi
         Log::info('apiActressSearch success!');
         return $actresses['result'];
     }
-    catch (HttpException $ex)
+    catch (\Exception $ex)
     {
         echo $ex;
     }
@@ -126,7 +126,7 @@ class DmmApi
         Log::info('apiItemSearch success!');
         return $actresses['result'];
     }
-    catch (HttpException $ex)
+    catch (\Exception $ex)
     {
         echo $ex;
     }
@@ -180,7 +180,7 @@ class DmmApi
         Log::info('genreSearchApi success!');
         return $genres['result'];
     }
-    catch (HttpException $ex)
+    catch (\Exception $ex)
     {
         echo $ex;
     }
