@@ -5,8 +5,6 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Api\Dmm\DmmProperty;
 use App\Api\Dmm\DmmApi;
-use App\Actress;
-use App\Item;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -30,6 +28,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // 本番環境(Heroku)でhttpsを強制する
+        if (\App::environment('production')) {
+          \URL::forceScheme('https');
+        }
     }
 }
