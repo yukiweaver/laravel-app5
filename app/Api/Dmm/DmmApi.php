@@ -25,8 +25,6 @@ class DmmApi
   public function apiActressSearch()
   {
     Log::info('apiActressSearch start!');
-    $request = new \HTTP_Request2(DmmConst::ENDPOINT . 'ActressSearch');
-    $url = $request->getUrl();
 
     $parameters = array(
         // Request parameters
@@ -41,13 +39,14 @@ class DmmApi
         'output'        => 'json',
     );
 
-    $url->setQueryVariables($parameters);
-
-    $request->setMethod(\HTTP_Request2::METHOD_GET);
+    $client = new \GuzzleHttp\Client();
+    $path = DmmConst::ENDPOINT . 'ActressSearch';
 
     try
     {
-        $response = $request->send();
+        $response = $client->get($path, [
+          'query' => $parameters
+        ]);
         $actressInfo = $response->getBody();
         $actresses = json_decode($actressInfo, true);
         // ステータスコード確認
@@ -80,8 +79,6 @@ class DmmApi
   public function apiItemsSearch()
   {
     Log::info('apiItemSearch start');
-    $request = new \HTTP_Request2(DmmConst::ENDPOINT . 'itemList');
-    $url = $request->getUrl();
 
     $parameters = array(
         // Request parameters
@@ -99,32 +96,33 @@ class DmmApi
         'output'        => 'json',
     );
 
-    $url->setQueryVariables($parameters);
-
-    $request->setMethod(\HTTP_Request2::METHOD_GET);
+    $client = new \GuzzleHttp\Client();
+    $path = DmmConst::ENDPOINT . 'ItemList';
 
     try
     {
-        $response = $request->send();
-        $actressInfo = $response->getBody();
-        $actresses = json_decode($actressInfo, true);
+        $response = $client->get($path, [
+          'query' => $parameters
+        ]);
+        $itemInfo = $response->getBody();
+        $items = json_decode($itemInfo, true);
 
         // ステータスコード確認
-        if ($actresses['result']['status'] != 200) {
-          Log::error('status:' . $actresses['result']['status']);
-          Log::error('message:' . $actresses['result']['message']);
-          $errors = $actresses['result']['errors'];
+        if ($items['result']['status'] != 200) {
+          Log::error('status:' . $items['result']['status']);
+          Log::error('message:' . $items['result']['message']);
+          $errors = $items['result']['errors'];
           foreach ($errors as $key => $error) {
             Log::error($key . ':' . $error);
           }
           return [
-            'status'    => $actresses['result']['status'],
-            'message'   => $actresses['result']['message'],
-            'errors'    => $actresses['result']['errors'],
+            'status'    => $items['result']['status'],
+            'message'   => $items['result']['message'],
+            'errors'    => $items['result']['errors'],
           ];
         }
         Log::info('apiItemSearch success!');
-        return $actresses['result'];
+        return $items['result'];
     }
     catch (\Exception $ex)
     {
@@ -139,8 +137,6 @@ class DmmApi
   public function apiGenresSearch()
   {
     Log::info('genreSearchApi start!');
-    $request = new \HTTP_Request2(DmmConst::ENDPOINT . 'GenreSearch');
-    $url = $request->getUrl();
 
     $parameters = array(
         // Request parameters
@@ -153,15 +149,16 @@ class DmmApi
         'output'        => 'json',
     );
 
-    $url->setQueryVariables($parameters);
-
-    $request->setMethod(\HTTP_Request2::METHOD_GET);
+    $client = new \GuzzleHttp\Client();
+    $path = DmmConst::ENDPOINT . 'GenreSearch';
 
     try
     {
-        $response = $request->send();
-        $genresInfo = $response->getBody();
-        $genres = json_decode($genresInfo, true);
+        $response = $client->get($path, [
+          'query' => $parameters
+        ]);
+        $genreInfo = $response->getBody();
+        $genres = json_decode($genreInfo, true);
 
         // ステータスコード確認
         if ($genres['result']['status'] != 200) {

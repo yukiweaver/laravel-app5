@@ -7,7 +7,7 @@ use App\Api\Dmm\DmmApi;
 use App\Api\Dmm\DmmProperty;
 use App\Consts\DmmConst;
 use App\Item;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UserRequest;
 use Hash;
 
@@ -21,10 +21,12 @@ class UserController extends Controller
     // $propertyInfo = DmmConst::PROPERTY_INFO;
     // $propertyInfo['keyword'] = 'あやみ旬果';
     // $dmmApi = app()->makeWith('DmmApi', $propertyInfo);
+    // $list = $dmmApi->apiActressSearch();
+    // dd($list);
     // $list = $dmmApi->apiItemsSearch();
     // dd($list);
     // $genresList = $dmmApi->apiGenresSearch();
-    // dd($genresList);
+    // dd($genresList); 
     // $item = Item::find('xvsr00237');
     // dd($item);
     return view('user.signin');
